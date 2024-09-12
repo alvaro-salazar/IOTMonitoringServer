@@ -27,7 +27,22 @@ SECRET_KEY = 'django-insecure-bu+)8ft@9+qd*#e#f_s@wkyv2tmq+#!a^3j15h3kjk^jzksu0j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "10.0.40.179"]
+
+import requests
+
+def get_public_ip():
+    try:
+        return requests.get('https://api64.ipify.org?format=json').json()['ip']
+    except Exception as e:
+        return None
+
+public_ip = get_public_ip()
+
+
+# ALLOWED_HOSTS = ["localhost", "10.0.40.179"]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+if public_ip:
+    ALLOWED_HOSTS.append(public_ip)
 
 
 # Application definition
