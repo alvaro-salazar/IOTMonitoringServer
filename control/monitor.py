@@ -47,10 +47,10 @@ def analyze_data():
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        # Nueva condición: Generar alerta si la temperatura promedio es mayor a 32 grados
-        if variable.lower() == "temperature" and item["check_value"] > 32:
+        # Nueva condición: Generar alerta si la temperatura promedio es mayor a 30 grados
+        if variable.lower() == "temperature" and item["check_value"] > 30:
             alert = True
-            message = "ALERT: Temperatura promedio mayor a 32°C ({}°C)".format(item["check_value"])
+            message = "ALERT: Temperatura promedio mayor a 30°C ({}°C)".format(item["check_value"])
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Enviando alerta a {} sobre temperatura".format(topic))
             client.publish(topic, message)
