@@ -62,18 +62,44 @@ def on_disconnect(client: mqtt.Client, userdata, rc):
     client.reconnect()
 
 
+#print("Iniciando cliente MQTT...", settings.MQTT_HOST, settings.MQTT_PORT)
+#try:
+#    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, settings.MQTT_USER)
+#    client.on_connect = on_connect
+#    client.on_message = on_message
+#    client.on_disconnect = on_disconnect
+
+#    if settings.MQTT_USE_TLS:
+#        client.tls_set(ca_certs=settings.CA_CRT_PATH,
+#                       tls_version=ssl.PROTOCOL_TLSv1_2, cert_reqs=ssl.CERT_NONE)
+
+#    client.username_pw_set(settings.MQTT_USER, settings.MQTT_PASSWORD)
+#    client.connect(settings.MQTT_HOST, settings.MQTT_PORT)
+
+#except Exception as e:
+#    print('Ocurrió un error al conectar con el bróker MQTT:', e)
+
+
+
 print("Iniciando cliente MQTT...", settings.MQTT_HOST, settings.MQTT_PORT)
 try:
-    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, settings.MQTT_USER)
+    # Crear el cliente MQTT con un Client ID opcional (usando el nombre de usuario como Client ID)
+    client = mqtt.Client(client_id=settings.MQTT_USER)
+
+    # Asignar los callbacks
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
 
+    # Configurar TLS si está habilitado
     if settings.MQTT_USE_TLS:
         client.tls_set(ca_certs=settings.CA_CRT_PATH,
                        tls_version=ssl.PROTOCOL_TLSv1_2, cert_reqs=ssl.CERT_NONE)
 
+    # Configurar las credenciales de usuario
     client.username_pw_set(settings.MQTT_USER, settings.MQTT_PASSWORD)
+
+    # Conectarse al broker
     client.connect(settings.MQTT_HOST, settings.MQTT_PORT)
 
 except Exception as e:
