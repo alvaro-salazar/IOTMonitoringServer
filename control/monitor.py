@@ -34,7 +34,7 @@ def analyze_data():
                 'station__location__city__name',
                 'station__location__state__name',
                 'station__location__country__name')
-    print(aggregation)
+
     alerts = 0
     for item in aggregation:
         alert = False
@@ -47,17 +47,18 @@ def analyze_data():
         state = item['station__location__state__name']
         city = item['station__location__city__name']
         user = item['station__user__username']
-        print(datetime.now(), "Enviando alerta de {}".format(variable))
-        # Nueva condición: Generar alerta si la temperatura promedio es mayor a 30 grados
-        if variable == "temperatura" and item["check_value"] > 30:
+
+        # Nueva condición: Generar alerta si el promedio de la temperatura es mayor a 31°C
+        if variable.lower() == "temperatura" and check_value > 31:
             alert = True
-            message = "ALERT: Temperatura promedio mayor a 30°C ({}°C)".format(item["check_value"])
+            message = "ALERT HIGH TEMP ({}°C)".format(check_value)
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Enviando alerta a {} sobre temperatura".format(topic))
             client.publish(topic, message)
             alerts += 1
 
-        elif item["check_value"] > max_value or item["check_value"] < min_value:
+
+        if item["check_value"] > max_value or item["check_value"] < min_value:
             alert = True
 
         if alert:

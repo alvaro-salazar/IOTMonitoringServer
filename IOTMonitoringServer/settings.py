@@ -181,8 +181,8 @@ MQTT_USER = "admin"
 MQTT_PASSWORD = "admin"
 
 # Credenciales para el usuario publicador del bróker MQTT
-MQTT_USER_PUB = "admin2"
-MQTT_PASSWORD_PUB = "admin2"
+MQTT_USER_PUB = "admin1"
+MQTT_PASSWORD_PUB = "admin1"
 
 # Tópico a suscribir. "+/+/+/+/out" se suscribe únicamente a los
 # tópicos con forma <país>/<estado>/<ciudad>/<usuario>/out.
