@@ -34,6 +34,7 @@ def analyze_data():
                 'station__location__city__name',
                 'station__location__state__name',
                 'station__location__country__name')
+    print(aggregation)
     alerts = 0
     for item in aggregation:
         alert = False
@@ -46,7 +47,7 @@ def analyze_data():
         state = item['station__location__state__name']
         city = item['station__location__city__name']
         user = item['station__user__username']
-        print(datetime.now(), "Enviando alerta de {} con valor {}".format(variable), item["check_value"])
+        print(datetime.now(), "Enviando alerta de {}".format(variable))
         # Nueva condición: Generar alerta si la temperatura promedio es mayor a 30 grados
         if variable == "temperatura" and item["check_value"] > 30:
             alert = True
