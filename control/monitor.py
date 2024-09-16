@@ -54,7 +54,7 @@ def analyze_data():
             message = "ALERT HIGH TEMP ({}°C)".format(item["check_value"])
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Enviando alerta a {} sobre temperatura".format(topic))
-            client.publish(topic, message)
+            client.publish(topic, message, qos=2)
             alerts += 1
 
 
@@ -65,7 +65,7 @@ def analyze_data():
             message = "ALERT {} {} {}".format(variable, min_value, max_value)
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
-            client.publish(topic, message)
+            client.publish(topic, message, qos=2)
             alerts += 1
 
     print(len(aggregation), "dispositivos revisados")
