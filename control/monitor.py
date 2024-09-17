@@ -11,6 +11,8 @@ from django.conf import settings
 # client = mqtt.Client(settings.MQTT_USER_PUB)
 # mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, settings.MQTT_USER_PUB)
 client = mqtt.Client(client_id=settings.MQTT_USER_PUB)
+client.enable_logger()
+
 #client = mqtt.Client(client_id=settings.MQTT_USER_PUB, protocol=mqtt.MQTTv311, transport="tcp")
 #client.callback_api_version = 5
 
@@ -51,11 +53,15 @@ def analyze_data():
 
         # Nueva condición: Generar alerta si el promedio de la temperatura es mayor a 29°C
         if variable.lower() == "temperatura" and item["check_value"] > 29:
-            alert = True
             message = "ALERT HIGH TEMP ({}°C)".format(item["check_value"])
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Enviando alerta a {} sobre temperatura".format(topic))
-            client.publish(topic, message, qos=2)
+            result = client.publish(topic, message, qos=1)
+            status = result.rc
+            if status == 0:
+                print(f"Mensaje enviado con éxito al tópico: {topic}")
+            else:
+                print(f"Fallo en el envío del mensaje al tópico: {topic}")
             alerts += 1
 
 
@@ -66,7 +72,7 @@ def analyze_data():
             message = "ALERT {} {} {}".format(variable, min_value, max_value)
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
-            client.publish(topic, message, qos=2)
+            client.publish(topic, message, qos=1)
             alerts += 1
 
     print(len(aggregation), "dispositivos revisados")
@@ -77,7 +83,10 @@ def on_connect(client, userdata, flags, rc):
     '''
     Función que se ejecuta cuando se conecta al bróker.
     '''
-    print("Conectando al broker MQTT...", mqtt.connack_string(rc))
+    if rc == 0:
+        print("Conexión exitosa al broker MQTT")
+    else:
+        print("Error de conexión al broker MQTT: ", mqtt.connack_string(rc))
 
 
 def on_disconnect(client: mqtt.Client, userdata, rc):
