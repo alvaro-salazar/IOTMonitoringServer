@@ -53,7 +53,7 @@ def analyze_data():
 
         # Nueva condición: Generar alerta si el promedio de la temperatura es mayor a 29°C
         if variable.lower() == "temperatura" and item["check_value"] > 29:
-            message = "ALERT HIGH TEMP ({}°C)".format(item["check_value"])
+            message = "HIGH TEMP"
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Enviando alerta a {} sobre temperatura".format(topic))
             result = client.publish(topic, message, qos=1)
