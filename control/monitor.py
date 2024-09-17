@@ -10,7 +10,8 @@ from django.conf import settings
 
 # client = mqtt.Client(settings.MQTT_USER_PUB)
 # mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, settings.MQTT_USER_PUB)
-client = mqtt.Client(client_id=settings.MQTT_USER_PUB, protocol=mqtt.MQTTv311, transport="tcp")
+client = mqtt.Client(client_id=settings.MQTT_USER_PUB)
+#client = mqtt.Client(client_id=settings.MQTT_USER_PUB, protocol=mqtt.MQTTv311, transport="tcp")
 #client.callback_api_version = 5
 
 def analyze_data():
@@ -48,7 +49,7 @@ def analyze_data():
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        # Nueva condición: Generar alerta si el promedio de la temperatura es mayor a 31°C
+        # Nueva condición: Generar alerta si el promedio de la temperatura es mayor a 29°C
         if variable.lower() == "temperatura" and item["check_value"] > 29:
             alert = True
             message = "ALERT HIGH TEMP ({}°C)".format(item["check_value"])
